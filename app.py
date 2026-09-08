@@ -1,0 +1,1 @@
+print("AI Course Assistant Started!")
