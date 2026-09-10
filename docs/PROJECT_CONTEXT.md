@@ -627,91 +627,8 @@ RAG增强Agent。
 
 ---
 
-# 9. 当前项目状态
 
-
-## 已完成
-
-
-环境：
-
-- Python环境搭建
-- PyCharm配置
-- Git初始化
-- GitHub仓库建立
-
-
-已学习：
-
-- Git基本流程
-- Python项目结构
-- 第三方包使用
-- 面向对象基础
-- pdfplumber使用
-
-
-已完成模块：
-
-PDF文档加载模块
-
-
-实现：
-
-PDF文件
-
-↓
-
-页面读取
-
-↓
-
-文本提取
-
-
----
-
-# 10. 当前开发阶段
-
-
-当前阶段：
-
-RAG基础阶段
-
-
-已完成：
-
-- PDF Loader
-
-
-正在开发：
-
-- Text Splitter
-
-
-下一步：
-
-Text Splitter
-
-↓
-
-Embedding
-
-↓
-
-Vector Database
-
-↓
-
-Retriever
-
-↓
-
-RAG问答系统
-
-
----
-
-# 11. 项目目录规划
+# 9. 项目目录规划
 
 
 AI-Course-Agent
@@ -741,7 +658,7 @@ AI-Course-Agent
 
 ---
 
-# 12. 开发原则
+# 10. 开发原则
 
 
 1. 先理解原理，再实现代码。
@@ -791,7 +708,7 @@ AI-Course-Agent
 
 ---
 
-# 13. 复试重点问题
+# 11. 重点问题
 
 
 需要能够回答：

@@ -1,7 +1,7 @@
-from document_loader import load_pdf
+from document_loader.document_loader import load_pdf
 
 # 测试1：正常PDF
-pdf_path = "../data/test.pdf"
+pdf_path = "../../data/test.pdf"
 
 text = load_pdf(pdf_path)
 
