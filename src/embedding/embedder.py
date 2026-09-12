@@ -4,7 +4,9 @@ class Embedder:
     def __init__(self):
         self.model = SentenceTransformer("BAAI/bge-small-zh")
 
-    def embed(self,text):
-        vector = self.model.encode(text)
+    def embed(self,document):
+        vector = self.model.encode(
+            document.text
+        )
 
         return vector

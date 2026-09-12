@@ -1,22 +1,14 @@
-from document_loader.document_loader import load_pdf
+from src.document_loader.document_loader import load_pdf
+documents = load_pdf(r"..\data\test.pdf")
 
-# 测试1：正常PDF
-pdf_path = "../data/test.pdf"
 
-text = load_pdf(pdf_path)
+print(len(documents))
 
-if text:
-    print("PDF读取成功")
-    print(text[:500])
-else:
-    print("PDF读取失败")
 
-# 测试2：错误路径
-wrong_path = "../data/not_exist.pdf"
+for doc in documents:
 
-text = load_pdf(wrong_path)
+    print("----------------")
 
-if text is None:
-    print("错误处理正常")
-else:
-    print("错误处理失败")
+    print(doc.text[:100])
+
+    print(doc.metadata)

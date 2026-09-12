@@ -1,15 +1,26 @@
 import pdfplumber
+from src.document import Document
 
 
 def load_pdf(file_path):
-    text = ""
+
+    documents = []
+
     try:
         with pdfplumber.open(file_path) as pdf:
-            for page in pdf.pages:
+            for page_num, page in enumerate(pdf.pages):
                 page_text = page.extract_text()
                 if page_text:
-                    text += page_text + "\n"
+                    doc = Document(
+                        text=page_text,
+                        metadata={
+                            "source": file_path,
+                            "page": page_num + 1
+                        }
+                    )
+
+                    documents.append(doc)
     except Exception as e:
         print(f"读取PDF失败: {e}")
         return None
-    return text
+    return documents

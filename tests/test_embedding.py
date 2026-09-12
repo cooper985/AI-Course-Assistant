@@ -1,15 +1,22 @@
+from src.document import Document
 from src.embedding.embedder import Embedder
+
+
+doc = Document(
+    "补码可以实现减法",
+    {
+        "source":"test.pdf",
+        "page":1
+    }
+)
 
 
 embedder = Embedder()
 
 
-text = "原码是一种表示有符号数的方法"
-
-
-vector = embedder.embed(text)
+vector = embedder.embed(doc)
 
 
 print(vector)
 
-print("向量长度:", len(vector))
+print(len(vector))

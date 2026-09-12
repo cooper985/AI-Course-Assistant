@@ -93,4 +93,44 @@ PDF文件
 ---
 
 # 后续记录区域
+## 2026.9.11
 
+完成：
+- 封装Embedding模块
+- 使用BGE-small-zh生成文本向量
+- 输出维度512
+
+理解：
+- Embedding作用
+- self.model和model区别
+- 类封装第三方模型的意义
+
+
+
+## 2026.9.12
+今日完成
+1. 完善Document数据结构
+   - 增加 metadata 字段，用于保存文档来源、页码等信息。
+   - 为后续RAG检索结果溯源做准备。
+2. 优化PDF Loader
+   - Loader由返回纯文本升级为返回Document对象。
+   - 实现PDF页面信息保存。
+3. 优化TextSplitter
+   - 从字符串切分升级为Document切分。
+   - 保证chunk切分后仍保留metadata。
+4. 完成Embedding模块
+   - 封装 Embedder 类，调用 BAAI/bge-small-zh 模型。
+   - 完成文本到向量转换测试。
+   - 输出向量维度：512。
+5. 完成Pipeline测试
+   完成流程验证：
+PDF
+ ↓
+Document
+ ↓
+Chunk
+ ↓
+Embedding
+ ↓
+Vector
+测试通过，验证各模块可以正常连接。

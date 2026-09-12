@@ -1,23 +1,34 @@
+from src.document import Document
 from src.text_splitter.splitter import TextSplitter
 
 
-text = """
-Transformer is a deep learning model.
-It uses self attention mechanism.
-Self attention allows tokens to interact with each other.
-"""
-
-
-splitter = TextSplitter(
-    chunk_size=50,
-    overlap=10
+doc = Document(
+    text="这是一个测试文本。" * 200,
+    metadata={
+        "source":"test.pdf",
+        "page":1
+    }
 )
 
 
-chunks = splitter.split_text(text)
+splitter = TextSplitter(
+    chunk_size=100,
+    overlap=20
+)
+
+
+chunks = splitter.split(doc)
+
+
+print("chunk数量:",len(chunks))
 
 
 for i, chunk in enumerate(chunks):
+
     print("----------------")
-    print(f"Chunk {i}")
-    print(chunk)
+
+    print("Chunk",i)
+
+    print(chunk.text[:50])
+
+    print(chunk.metadata)
