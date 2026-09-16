@@ -33,7 +33,9 @@ class VectorStore:
             if score > best_score:
                 best_score = score
                 best_index = i
+        if best_index == -1:
+            return None
 
-        return best_index
+        return self.documents[best_index]
 
 
