@@ -44,7 +44,7 @@ print(first_chunk.metadata)
 embedder = Embedder()
 vectors = []
 for i, chunk in enumerate(all_chunks):
-    vector = embedder.embed(chunk)
+    vector = embedder.embed_document(chunk)
     vectors.append(vector)
     print(f"第{i}个chunk完成，向量维度:{len(vector)}")
 

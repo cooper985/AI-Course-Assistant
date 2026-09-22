@@ -14,7 +14,7 @@ doc = Document(
 embedder = Embedder()
 
 
-vector = embedder.embed(doc)
+vector = embedder.embed_document(doc)
 
 
 print(vector)
