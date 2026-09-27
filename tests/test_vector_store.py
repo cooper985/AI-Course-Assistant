@@ -25,13 +25,13 @@ doc1 = Document(
 
 store.add(
     doc0,
-    [1,0,0]
+    [0.5,0.5,0]
 )
 
 
 store.add(
     doc1,
-    [0,1,0]
+    [1,0,0]
 )
 
 
@@ -41,5 +41,6 @@ query = [0.9,0.1,0]
 result = store.search(query)
 
 
-print(result.text)
-print(result.metadata)
+for doc, score in result:
+    print(doc)
+    print(score)

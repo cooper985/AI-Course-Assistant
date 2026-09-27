@@ -1,4 +1,3 @@
-from embedding.embedder import Embedder
 
 
 class Retriever:
@@ -11,9 +10,12 @@ class Retriever:
         self.embedder = embedder
         self.vector_store = vector_store
 
-    def retrieve(self, query):
+    def retrieve(self, query, k=3):
         query_vector = self.embedder.embed_query(query)
 
-        document = self.vector_store.search(query_vector)
+        results = self.vector_store.search(
+            query_vector,
+            k=k
+        )
 
-        return document
+        return results

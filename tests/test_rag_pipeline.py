@@ -41,13 +41,15 @@ retriever = Retriever(
 query = "补码为什么可以实现减法？"
 
 
-result = retriever.retrieve(query)
+results = retriever.retrieve(
+    query,
+    k=3
+)
 
-
-print("检索结果:")
-print(result.text)
-
-print("来源:")
-print(result.metadata)
+for doc, score in results:
+    print("----------------")
+    print("score:", score)
+    print(doc.text[:100])
+    print(doc.metadata)
 
 

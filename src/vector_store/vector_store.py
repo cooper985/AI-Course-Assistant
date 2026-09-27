@@ -22,20 +22,25 @@ class VectorStore:
         )
         return similarity
 
-    def search(self, query_vector):
-        best_score = -1
-        best_index = -1
+    def search(self, query_vector, k=3):
+        results = []
         for i, vector in enumerate(self.vectors):
             score = self.cosine_similarity(
                 query_vector,
                 vector
-        )
-            if score > best_score:
-                best_score = score
-                best_index = i
-        if best_index == -1:
-            return None
+            )
+            results.append(
+                (
+                    self.documents[i],
+                    score
+                )
+            )
 
-        return self.documents[best_index]
+        results.sort(
+            key = lambda x: x[1],
+            reverse = True
+        )
+
+        return results[:k]
 
 
