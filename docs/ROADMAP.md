@@ -2,6 +2,8 @@
 
 版本 v2，2026-09-17。以 [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) 为架构依据。P1–P6 是阶段；周数是预计预算，未勾选的项目均未验收。
 
+进度核对（2026-09-27，主分支 [2907c8d](https://github.com/cooper985/AI-Course-Assistant/tree/2907c8d4c8d945dd889cc7fc102aa5dc55598fb8)）：`Retriever`、查询编码、NumPy Top-K 与分数返回、PDF 到检索的示例脚本已有代码；这不等于 M1 验收通过。
+
 总投入：12 周核心交付 + 4 周缓冲／深化；每天约四小时，每周约 24 小时计划任务，余下时间用于返工、复盘和休息。
 
 ## 1. 统一顺序与阶段门槛
@@ -43,6 +45,8 @@
 ## 4. 验收清单
 
 - [ ] M1／P1：Retriever 完整调用 Embedder + NumPy Store；返回结果有来源和分数，真实样本可复现。
+  - 代码已具备 `embed_query` → `search(k)` 调用，返回按分数排序的 `(Document, score)` 列表；PDF 检索脚本打印页码等 metadata。
+  - 仍缺仓库内可复现的 PDF／真实查询样本、有效断言和逐题结果；`test_retriever.py` 未适配列表返回值，故暂不勾选 M1。
 - [ ] M2／P2：RAG 可回答并映射引用；无证据和服务失败分开处理。
 - [ ] M3／P3：Qdrant 可重启恢复、按课程过滤；重入库不重复；E0 对照通过。
 - [ ] M4／P4：E1、E2 有受控对照、逐题记录、成本与失败分析；不预设提升数字。
@@ -51,7 +55,9 @@
 
 勾选时在 DEVELOPMENT_LOG 记录日期、提交、实际命令与结果；不把时间到期当完成。
 
-## 5. 接下来第一天及首周
+## 5. 首周原计划（2026-09-17 制定）
+
+第 2–4 天所列 Top-K、Retriever 与 PDF 检索串联已有基础代码；边界校验、旧脚本修正和真实样本验收仍待完成。下表保留原计划，不作为当前完成记录。
 
 第 1 天：1h 画出已有 Document → Loader → Splitter → Embedder → VectorStore 数据流；2h 修正切分步长、加载失败、空数据的契约；1h 做正常／非法／空输入检查并记录。当前不要求先安装 Qdrant。
 

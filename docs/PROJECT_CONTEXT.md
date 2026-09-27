@@ -34,24 +34,24 @@
 
 ## 3. 当前到底完成了什么
 
-本轮核对主分支 [9382684](https://github.com/cooper985/AI-Course-Assistant/tree/938268498931d8e118a6cfc9d401213742c9b04a)。它相对代码基线 8a4f93b 只更新了文档。以下是静态审阅，不代表本轮运行测试通过。
+截至 2026-09-27，静态核对主分支 [2907c8d](https://github.com/cooper985/AI-Course-Assistant/tree/2907c8d4c8d945dd889cc7fc102aa5dc55598fb8)：[f58e692](https://github.com/cooper985/AI-Course-Assistant/commit/f58e692ebd1a18a121b94662b12b0385f3076b92) 增加基础 Retriever 与端到端检索示例，随后 2907c8d 增加 Top-K 和相似度分数。以下为代码静态审阅，本次未运行脚本或效果评测。
 
 | 模块 | 状态 | 代码证据／限制 |
 |---|---|---|
 | Document | 基础代码存在 | src/document.py；text + metadata |
 | Loader | 基础代码存在 | 按页提取文本，保存 source、page；异常返回 None |
 | Splitter | 基础代码存在 | 默认 500 字符、50 重叠；缺参数校验 |
-| Embedder | 基础代码存在 | BAAI/bge-small-zh；单条 Document 编码 |
-| NumPy VectorStore | 基础代码存在 | 内存余弦扫描；只返回 Top-1 Document |
-| 测试脚本 | 示例存在 | 主要打印；pipeline 到 Embedding，搜索另用手工向量 |
-| Retriever | 尚未实现独立模块 | 不把 VectorStore.search 当成完整 Retriever |
-| RAG／LLM／Qdrant | 尚未实现 | 没有完整提问—检索—回答链路 |
+| Embedder | 基础代码存在 | `embed_document(Document)` 与 `embed_query(str)` 使用 BAAI/bge-small-zh 编码文档和查询 |
+| NumPy VectorStore | 已实现基础 Top-K | `search(query_vector, k=3)` 按余弦分数降序返回 `(Document, score)` 列表；仍是内存扫描，缺向量及 k 的有效性校验 |
+| 测试脚本 | 检索示例存在，验收不足 | `test_rag_pipeline.py` 串起 PDF → Chunk → Embedding → VectorStore → Retriever 并打印分数、文本和来源；脚本主要打印、缺断言，所用 PDF 不在仓库；`test_retriever.py` 仍按旧的单 Document 返回值访问 `.text`／`.metadata` |
+| Retriever | 已实现基础模块 | `src/retriever.py` 将自然语言查询交给 `embed_query`，再调用 `VectorStore.search(query_vector, k)` 返回有序结果；课程／章节过滤与输入校验尚未实现 |
+| RAG／LLM／Qdrant | 尚未实现 | `test_rag_pipeline.py` 虽以 RAG 命名，实际只到检索结果打印；没有生成回答、引用组织或 Qdrant 接入 |
 | LangGraph／FastAPI／Vue | 尚未实现 | app.py 只有启动提示 |
 | 定量实验／部署 | 尚未验证 | 不填写完成率或推测效果数字 |
 
-当前阶段为 P1 前置准备。下一步是修正基础边界、实现 NumPy Top-K、接通 Retriever 和真实查询。
+当前为 P1 基础检索实现阶段：Top-K、分数和 Retriever 调用链已有代码，但真实资料样本、有效断言和结果记录尚未达到 M1 验收。下一步优先修正边界与旧返回值脚本，建立可复现的真实查询基线。
 
-需要优先处理：chunk_size 与 overlap 使步长不前进的情况；Loader 的 None／空结果与调用方不一致；空块访问；零向量、非有限值和维度不一致；检索无分数；测试依赖未提供的本地 PDF。
+需要优先处理：`chunk_size` 与 `overlap` 使步长不前进的情况；Loader 的 `None`／空结果与调用方不一致；空块访问；零向量、非有限值、维度不一致及无效 k；稳定块 ID；测试脚本依赖仓库未提供的 `..\data\test.pdf`，且 `test_retriever.py` 尚未适配列表返回值。
 
 以后有新提交时，先看实际代码和日志，更新本表与基线；历史快照不压过新证据。
 
@@ -129,7 +129,7 @@ Qdrant 是向量存储，Retriever 是检索业务入口，RAG 是检索加生�
 | Embedder；现有 src/embedding/ | 文档文本或查询 → 向量 | 管理同一模型与查询／文档编码方式 | 维度一致，长度与截断可检查 |
 | VectorStore；现有 src/vector_store/ | 向量与块／查询向量 → scored hits | NumPy 保留为精确搜索参考 | 正常排序、Top-K、空库和坏向量检查 |
 | QdrantStore；新增 src/vector_store/qdrant_store.py | 同上，增加课程过滤 → scored hits | 适配 Qdrant；不负责生成查询向量 | 重启恢复，过滤有效，重复导入可控 |
-| Retriever；新增 src/retriever.py | 问题、course_id、可选章节、k → 检索结果 | 调用 Embedder 和存储，统一检索入口 | 自然语言问题可返回证据、分数和来源 |
+| Retriever；现有 src/retriever.py（待扩展） | 问题、course_id、可选章节、k → 检索结果 | 调用 Embedder 和存储，统一检索入口；当前仅接收问题和 k | 自然语言问题可返回证据、分数和来源 |
 | Ingestion；新增 src/ingestion.py | 文件与课程 → 入库结果 | 串起解析、切分、编码与写入，管理状态 | 失败资料不被当作可用知识 |
 | LLMClient；新增 src/llm.py | 消息／提示词 → 输出与调用记录 | 集中配置模型、超时和异常；先支持一个提供商 | 成功、超时、格式失败可区分 |
 | RAG；新增 src/rag.py | 问题与范围 → 答案、引用、状态 | 调用 Retriever，控制证据预算并组织生成 | 引用来自本次证据，资料不足不编造来源 |
