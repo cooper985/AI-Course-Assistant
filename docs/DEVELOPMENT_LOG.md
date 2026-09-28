@@ -199,17 +199,3 @@ Vector
 ### 验证与下一步
 
 本次检查文档链接、阶段一致性与历史保留，提交范围限于 docs 下六个 Markdown 文件。下一步开发仍是基础参数／空输入边界、NumPy Top-K 和 Retriever；实现前解释职责，建立有效断言与真实检索样本。每次完成可运行里程碑应检查差异并进行版本管理。
-
-## 2026-09-27：检索链路代码核对
-
-### 代码进展
-
-静态核对主分支 [2907c8d](https://github.com/cooper985/AI-Course-Assistant/tree/2907c8d4c8d945dd889cc7fc102aa5dc55598fb8)。历史条目的“当前”和“下一步”仅对应各自日期。
-
-- [f58e692](https://github.com/cooper985/AI-Course-Assistant/commit/f58e692ebd1a18a121b94662b12b0385f3076b92) 将 Embedder 分为 `embed_document(Document)` 与 `embed_query(str)`，新增 Retriever、`test_retriever.py` 和 PDF → Chunk → Embedding → VectorStore → Retriever 的 `test_rag_pipeline.py`。
-- [2907c8d](https://github.com/cooper985/AI-Course-Assistant/commit/2907c8d4c8d945dd889cc7fc102aa5dc55598fb8) 使 NumPy Store 按余弦分数排序并返回 Top-K `(Document, score)` 列表；Retriever 接收 `k` 并返回该列表，检索流水线脚本已按新格式打印文本、metadata 和分数。
-- 上述脚本只完成检索展示，不包含 LLM 生成回答、引用组织或 Qdrant；P2／P3 决策与时序不变。
-
-### 验证状态与下一步
-
-本次只做静态核对，未运行测试或填写效果数字。现有 `tests/test_*.py` 主要是顶层打印脚本，缺有效断言；`test_retriever.py` 仍把列表当单个 Document 访问 `.text`／`.metadata`，与当前 API 不符；PDF 脚本引用仓库未提供的 `..\data\test.pdf`。M1 所需的真实样本复现与逐题结果仍缺。先修正脚本和输入边界，准备可复现 PDF 与查询，再按 [ROADMAP.md](ROADMAP.md) 验收 P1。

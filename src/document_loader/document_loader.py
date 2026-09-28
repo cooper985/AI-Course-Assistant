@@ -1,4 +1,5 @@
 import pdfplumber
+import os
 from src.document import Document
 
 
@@ -23,4 +24,23 @@ def load_pdf(file_path):
     except Exception as e:
         print(f"读取PDF失败: {e}")
         return None
+    return documents
+
+
+def load_pdfs(directory):
+
+    documents = []
+
+    files = os.listdir(directory)
+
+    for file in files:
+
+        if file.endswith(".pdf"):
+
+            docs = load_pdf(
+                os.path.join(directory, file)
+            )
+
+            documents.extend(docs)
+
     return documents

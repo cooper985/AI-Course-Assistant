@@ -1,11 +1,11 @@
-from src.document_loader.document_loader import load_pdf
+from src.document_loader.document_loader import load_pdfs
 from src.text_splitter.splitter import TextSplitter
 from src.embedding.embedder import Embedder
 from src.vector_store.vector_store import VectorStore
 from src.retriever import Retriever
 
-pdf_path = r"..\data\test.pdf"
-documents = load_pdf(pdf_path)
+data_path = r"..\data"
+documents = load_pdfs(data_path)
 print("Document数量：")
 print(len(documents))
 
@@ -38,18 +38,29 @@ retriever = Retriever(
     store
 )
 
-query = "补码为什么可以实现减法？"
+queries = [
+    "补码为什么可以实现减法？",
+    "存储器有哪些主要类型？",
+    "CPU的主要组成部分有哪些？",
+    "指令系统包括哪些内容？",
+    "系统总线的作用是什么？"
+]
 
 
-results = retriever.retrieve(
-    query,
-    k=3
-)
+for query in queries:
 
-for doc, score in results:
-    print("----------------")
-    print("score:", score)
-    print(doc.text[:100])
-    print(doc.metadata)
+    print("================")
+    print("问题:", query)
+
+    results = retriever.retrieve(
+        query,
+        k=3
+    )
+
+    for doc, score in results:
+        print("----------------")
+        print("score:", score)
+        print(doc.text[:100])
+        print(doc.metadata)
 
 
