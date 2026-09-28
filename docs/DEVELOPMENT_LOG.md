@@ -199,3 +199,39 @@ Vector
 ### 验证与下一步
 
 本次检查文档链接、阶段一致性与历史保留，提交范围限于 docs 下六个 Markdown 文件。下一步开发仍是基础参数／空输入边界、NumPy Top-K 和 Retriever；实现前解释职责，建立有效断言与真实检索样本。每次完成可运行里程碑应检查差异并进行版本管理。
+
+
+## 2026-09-27
+
+Completed:
+- Implemented Top-K vector similarity search.
+- Modified VectorStore to return ranked documents with similarity scores.
+- Updated Retriever to support configurable k retrieval.
+- Verified end-to-end PDF -> Retriever -> Top-K retrieval pipeline.
+
+Key understanding:
+- VectorStore is responsible for vector similarity search.
+- Retriever bridges user queries and vector search.
+- Document embedding and query embedding are separate processes.
+
+
+## 2026-09-28
+
+完成内容：
+
+- 新增多 PDF 文档加载功能，支持从数据目录中自动读取多个课程 PDF 文件。
+- 保留原有单 PDF 加载逻辑，通过新增 `load_pdfs()` 实现目录级文档管理。
+- 将 RAG 测试数据从单个 test.pdf 切换为计算机组成原理五章教材。
+- 完成多文档知识库的加载测试，共生成 309 个 Document，并保留 source 和 page 元数据。
+- 使用新的多文档知识库测试 Retriever 检索流程，验证 Top-K 检索链路正常运行。
+
+测试情况：
+
+- 成功加载五章教材 PDF。
+- 成功完成 Document → Chunk → Embedding → VectorStore → Retriever 全流程测试。
+- 当前基础检索方案能够找到相关知识区域，但部分问题存在 Top-1 排序不准确的问题。
+
+下一步：
+
+- 基于当前 Retriever 建立 RAG 问答生成流程。
+- 后续通过实验优化切分策略、Embedding 模型和检索排序效果。
