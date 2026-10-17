@@ -1,3 +1,8 @@
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from src.retriever import Retriever
 from src.embedding.embedder import Embedder
 from src.vector_store.vector_store import VectorStore
@@ -46,10 +51,14 @@ retriever = Retriever(
 )
 
 
-result = retriever.retrieve(
+results = retriever.retrieve(
     "补码为什么可以实现减法"
 )
 
 
-print(result.text)
-print(result.metadata)
+assert len(results) == 2
+assert results[0][0] is doc1
+for doc, score in results:
+    print(doc.text)
+    print(doc.metadata)
+    print("score:", score)

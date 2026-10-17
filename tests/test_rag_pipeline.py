@@ -1,11 +1,18 @@
+import sys
+from math import isfinite
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from src.document_loader.document_loader import load_pdfs
 from src.text_splitter.splitter import TextSplitter
 from src.embedding.embedder import Embedder
 from src.vector_store.vector_store import VectorStore
 from src.retriever import Retriever
 
-data_path = r"..\data"
+data_path = Path(__file__).resolve().parents[1] / "data"
 documents = load_pdfs(data_path)
+assert documents, f"没有读取到 PDF 文字：{data_path}"
 print("Document数量：")
 print(len(documents))
 
@@ -56,6 +63,10 @@ for query in queries:
         query,
         k=3
     )
+    assert len(results) == min(3, len(chunks))
+    scores = [float(score) for _, score in results]
+    assert all(isfinite(score) for score in scores)
+    assert scores == sorted(scores, reverse=True)
 
     for doc, score in results:
         print("----------------")

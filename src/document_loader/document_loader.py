@@ -1,5 +1,5 @@
 import pdfplumber
-import os
+from pathlib import Path
 from src.document import Document
 
 
@@ -7,23 +7,19 @@ def load_pdf(file_path):
 
     documents = []
 
-    try:
-        with pdfplumber.open(file_path) as pdf:
-            for page_num, page in enumerate(pdf.pages):
-                page_text = page.extract_text()
-                if page_text:
-                    doc = Document(
-                        text=page_text,
-                        metadata={
-                            "source": file_path,
-                            "page": page_num + 1
-                        }
-                    )
+    with pdfplumber.open(file_path) as pdf:
+        for page_num, page in enumerate(pdf.pages):
+            page_text = page.extract_text()
+            if page_text:
+                doc = Document(
+                    text=page_text,
+                    metadata={
+                        "source": str(file_path),
+                        "page": page_num + 1
+                    }
+                )
 
-                    documents.append(doc)
-    except Exception as e:
-        print(f"读取PDF失败: {e}")
-        return None
+                documents.append(doc)
     return documents
 
 
@@ -31,16 +27,12 @@ def load_pdfs(directory):
 
     documents = []
 
-    files = os.listdir(directory)
+    directory = Path(directory)
+    if not directory.is_dir():
+        raise NotADirectoryError(f"PDF 目录不存在或不是目录：{directory}")
 
-    for file in files:
-
-        if file.endswith(".pdf"):
-
-            docs = load_pdf(
-                os.path.join(directory, file)
-            )
-
-            documents.extend(docs)
+    for file_path in sorted(directory.rglob("*")):
+        if file_path.is_file() and file_path.suffix.lower() == ".pdf":
+            documents.extend(load_pdf(file_path))
 
     return documents

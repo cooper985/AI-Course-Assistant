@@ -1,0 +1,6 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv",
+    "code-runner.executorMap": {
+        "python": "\"$pythonPath\" -u"
+    }
+}
